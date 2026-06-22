@@ -5,29 +5,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.14</version>
+        <version>3.4.6</version>
         <relativePath/>
     </parent>
     <groupId>com.smartlogix</groupId>
     <artifactId>ms_inventario</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ms_inventario</name>
-    <description>ms_inventario</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <description>Microservicio de Inventario - SmartLogix</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -42,7 +29,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -59,7 +45,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -81,9 +66,7 @@
                     <execution>
                         <id>default-compile</id>
                         <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
+                        <goals><goal>compile</goal></goals>
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
@@ -96,9 +79,7 @@
                     <execution>
                         <id>default-testCompile</id>
                         <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
+                        <goals><goal>testCompile</goal></goals>
                         <configuration>
                             <annotationProcessorPaths>
                                 <path>
@@ -112,5 +93,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
