@@ -1,25 +1,29 @@
 package com.smartlogix.gateway;
 
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.function.RequestPredicates;
-import org.springframework.web.servlet.function.RouterFunction;
-import org.springframework.web.servlet.function.ServerResponse;
-
-import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
-import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
-import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions.uri;
 
 @Configuration
 public class GatewayConfig {
 
     @Bean
-    public RouterFunction<ServerResponse> inventarioRoute() {
-        return route("inventario_route")
-                // Se define qué rutas atrapar y se llama a http() vacío
-                .route(RequestPredicates.path("/api/productos").or(RequestPredicates.path("/api/productos/**")), http())
-                // Se define hacia dónde se redirige usando el filtro uri()
-                .before(uri("http://localhost:8081"))
+    public RouteLocator routes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("ms-clientes", r -> r
+                        .path("/api/clientes", "/api/clientes/**")
+                        .uri("http://localhost:8081"))
+                .route("ms-inventario", r -> r
+                        .path("/api/productos", "/api/productos/**")
+                        .uri("http://localhost:8082"))
+                .route("ms-ventas", r -> r
+                        .path("/api/pedidos", "/api/pedidos/**")
+                        .uri("http://localhost:8083"))
+                .route("ms-logistica", r -> r
+                        .path("/api/despachos", "/api/despachos/**",
+                              "/api/transportistas", "/api/transportistas/**")
+                        .uri("http://localhost:8084"))
                 .build();
     }
 }
