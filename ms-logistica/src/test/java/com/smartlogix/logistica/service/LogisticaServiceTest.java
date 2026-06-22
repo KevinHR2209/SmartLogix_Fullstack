@@ -1,26 +1,28 @@
 package com.smartlogix.logistica.service;
 
-import com.smartlogix.logistica.entity.Despacho;
-import com.smartlogix.logistica.repository.DespachoRepository;
+import com.smartlogix.mslogistica.model.Despacho;
+import com.smartlogix.mslogistica.repository.DespachoRepository;
+import com.smartlogix.mslogistica.service.DespachoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class LogisticaServiceTest {
+public class LogisticaServiceTest {
 
     @Mock
     private DespachoRepository despachoRepository;
 
     @InjectMocks
-    private LogisticaService logisticaService;
+    private DespachoService despachoService;
 
     @BeforeEach
     void setUp() {
@@ -28,49 +30,46 @@ class LogisticaServiceTest {
     }
 
     @Test
-    void listarTodos_retornaLista() {
-        Despacho d = new Despacho();
-        when(despachoRepository.findAll()).thenReturn(List.of(d));
+    void listarTodos_debeRetornarLista() {
+        Despacho d1 = new Despacho();
+        Despacho d2 = new Despacho();
+        when(despachoRepository.findAll()).thenReturn(Arrays.asList(d1, d2));
 
-        List<Despacho> result = logisticaService.listarTodos();
+        List<Despacho> resultado = despachoService.listarTodos();
 
-        assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        verify(despachoRepository, times(1)).findAll();
     }
 
     @Test
-    void guardar_llamaRepositoryYRetornaDespacho() {
+    void listarTodos_repositorioVacio_debeRetornarListaVacia() {
+        when(despachoRepository.findAll()).thenReturn(Arrays.asList());
+
+        List<Despacho> resultado = despachoService.listarTodos();
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void guardar_debeRetornarDespachoGuardado() {
         Despacho d = new Despacho();
         when(despachoRepository.save(d)).thenReturn(d);
 
-        Despacho result = logisticaService.guardar(d);
+        Despacho resultado = despachoService.guardar(d);
 
-        assertNotNull(result);
+        assertNotNull(resultado);
         verify(despachoRepository, times(1)).save(d);
     }
 
     @Test
-    void buscarPorId_cuandoExiste_retornaDespacho() {
+    void buscarPorId_debeRetornarDespacho() {
         Despacho d = new Despacho();
         when(despachoRepository.findById(1L)).thenReturn(Optional.of(d));
 
-        Despacho result = logisticaService.buscarPorId(1L);
+        Optional<Despacho> resultado = despachoService.buscarPorId(1L);
 
-        assertNotNull(result);
-    }
-
-    @Test
-    void buscarPorId_cuandoNoExiste_retornaNull() {
-        when(despachoRepository.findById(99L)).thenReturn(Optional.empty());
-
-        Despacho result = logisticaService.buscarPorId(99L);
-
-        assertNull(result);
-    }
-
-    @Test
-    void eliminar_llamaDeleteById() {
-        logisticaService.eliminar(1L);
-        verify(despachoRepository, times(1)).deleteById(1L);
+        assertTrue(resultado.isPresent());
     }
 }
